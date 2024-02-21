@@ -48,7 +48,6 @@ if __name__ == "__main__":
         iter_arr_transpose = iter_arr.T
 
         # print(iter_arr_transpose.shape)
-        
         ma_out_x = np.append(ma_out_x, utils.moving_avg(arr_in=iter_arr_transpose[0], window=window_size))
         
         y_ma = utils.moving_avg(arr_in=iter_arr_transpose[1], window=window_size)
