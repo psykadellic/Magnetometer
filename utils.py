@@ -1,5 +1,74 @@
 import numpy as np
 from scipy.signal import savgol_filter
+import matplotlib.pyplot as plt
+
+############################################################
+### MAIN PARSE
+
+def read_and_split_file(file_in: str):
+    input_csv = np.genfromtxt("./csv/"+file_in, delimiter=",", skip_header=1).T
+    in_x_axis = input_csv[0]
+    in_y_axis = input_csv[4]
+
+    # plt.plot(in_x_axis, in_y_axis, linewidth=2, linestyle="-", c="b")
+    # plt.show()
+
+    # [[x1, x2, x3]
+    #  [y1, y2, y2]]
+    arr_in = np.vstack((in_x_axis, in_y_axis)).T
+
+    # [[x1, y1]
+    #  [x2, y2]
+    #  [x3, y3]]
+
+    # slice arry_in into proper windows
+
+    arr_in = arr_in[3000:]
+    sliced_arr = slice_arr(arr_in)
+    # [ [[x1, y1]
+    #    [x2, y2]],
+    #   [[x3, y3]
+    #    [x4, y4]]  ]
+
+    return sliced_arr
+
+def filter_data(sliced_arr: np.ndarray):
+    
+
+    ma_out_x = np.array([])
+    ma_out_y = np.array([])
+
+    filtered_out_x = np.array([])
+    filtered_out_y = np.array([])
+
+    combined_out_y = np.array([])
+    for arr in sliced_arr:
+        window_size = 25
+        iter_arr = trim_arr_mod(arr, window_size)
+        iter_arr_transpose = iter_arr.T
+
+        # print(iter_arr_transpose.shape)
+        ma_out_x = np.append(ma_out_x, moving_avg(arr_in=iter_arr_transpose[0], window=window_size))
+        
+        y_ma = moving_avg(arr_in=iter_arr_transpose[1], window=window_size)
+        ma_out_y = np.append(ma_out_y, y_ma)
+
+        filtered_out_x = np.append(filtered_out_x, iter_arr_transpose[0])
+        filtered_out_y = np.append(filtered_out_y, utils_sav_filter(arr_in=iter_arr_transpose[1], window=window_size))
+
+        combined_out_y = np.append(combined_out_y, utils_sav_filter(arr_in=y_ma, window=5))
+    
+    # ma filter trials
+    # plt.plot(ma_out_x, ma_out_y, linewidth=2, linestyle="-", c="b")
+    # plt.show()
+
+    # filtered trials
+    # plt.plot(filtered_out_x, filtered_out_y, linewidth=2, linestyle="-", c="b")
+    # plt.show()
+
+    # plt.plot(ma_out_x, combined_out_y, linewidth=2, linestyle="-", c="b")
+    # plt.show()
+
 
 ############################################################
 ### UTILS
@@ -34,8 +103,8 @@ def slice_arr(
         entry_len: int = 10,
         sleep_duration = 3,
 
-        head_pad = 2,
-        tail_pad = 2,
+        head_pad = 1,
+        tail_pad = 1,
         granularity= 100,
         trials = 100
     ):
@@ -57,7 +126,10 @@ def slice_arr(
         base_offset = i*trial_total_len
         arr_slice = arr_in[(base_offset + head_pad) : np.int_(base_offset + (head_slice - tail_pad))]
         # print("arr slice", arr_slice)
-        ret_arr[i] = arr_slice
+        try:
+            ret_arr[i] = arr_slice
+        except:
+            print("trial {} error", i)
     
     # print("returned nd arr: ", ret_arr)
 
