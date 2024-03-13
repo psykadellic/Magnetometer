@@ -44,4 +44,4 @@ if __name__ == "__main__":
             average_df.to_csv("./out/"+file[0:-4]+"/average_data.csv")
             plt.plot(average_df.index, average_df.values)
             plt.savefig("./out/"+file[0:-4]+"/average_plot.png")
-    
+
