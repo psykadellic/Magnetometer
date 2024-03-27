@@ -17,6 +17,8 @@ if __name__ == "__main__":
 
     for root, dir, files in os.walk("./csv"):
         for file in files:
+            if ".DS_Store" in file:
+                    continue
             ret_arr = utils.read_and_split_file(file)
             try:
                 os.mkdir("./out/"+file[0:-4])
@@ -44,4 +46,3 @@ if __name__ == "__main__":
             average_df.to_csv("./out/"+file[0:-4]+"/average_data.csv")
             plt.plot(average_df.index, average_df.values)
             plt.savefig("./out/"+file[0:-4]+"/average_plot.png")
-

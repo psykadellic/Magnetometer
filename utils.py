@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 ### MAIN PARSE
 
 def read_and_split_file(file_in: str):
+    print("file in", file_in)
     input_csv = np.genfromtxt("./csv/"+file_in, delimiter=",", skip_header=1).T
     in_x_axis = input_csv[0]
     in_y_axis = input_csv[4]
