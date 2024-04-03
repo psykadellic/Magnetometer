@@ -4,14 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import utils
 
-##########################
-# cleaned input should be array of tuples [](x,y)
-# use zip and unzip when modifying accordingly
-#
-#
-##########################
-
-
 
 if __name__ == "__main__":
 
@@ -26,6 +18,9 @@ if __name__ == "__main__":
                 ""
 
             averages = []
+            mins = []
+            maxes = []
+            std_dev = []
             
             for ind, arr in enumerate(ret_arr):
                 try:
@@ -41,8 +36,29 @@ if __name__ == "__main__":
                 # plt.show()
 
                 averages.append(df[[1]].mean())
+                mins.append(df[[1]].min())
+                maxes.append(df[[1]].max())
+                std_dev.append(df[[1]].std())
             
-            average_df = pd.DataFrame(averages)
-            average_df.to_csv("./out/"+file[0:-4]+"/average_data.csv")
-            plt.plot(average_df.index, average_df.values)
-            plt.savefig("./out/"+file[0:-4]+"/average_plot.png")
+            # average_df = pd.DataFrame(averages)
+            # average_df.to_csv("./out/"+file[0:-4]+"/average/data_avg_abs.csv")
+            # plt.plot(average_df.index, average_df.values)
+            # plt.savefig("./out/"+file[0:-4]+"/average/plot_avg_abs.png")
+            # plt.cla()
+
+            # average_df = pd.DataFrame(mins)
+            # average_df.to_csv("./out/"+file[0:-4]+"/average/data_min_abs.csv")
+            # plt.plot(average_df.index, average_df.values)
+            # plt.savefig("./out/"+file[0:-4]+"/average/plot_min_abs.png")
+            # plt.cla()
+
+            # average_df = pd.DataFrame(maxes)
+            # average_df.to_csv("./out/"+file[0:-4]+"/average/data_max_abs.csv")
+            # plt.plot(average_df.index, average_df.values)
+            # plt.savefig("./out/"+file[0:-4]+"/average/plot_max_abs.png")
+            # plt.cla()
+
+            # average_df = pd.DataFrame(std_dev)
+            # average_df.to_csv("./out/"+file[0:-4]+"/average/data_std_abs.csv")
+            # plt.plot(average_df.index, average_df.values)
+            # plt.savefig("./out/"+file[0:-4]+"/average/plot_std_abs.png")
