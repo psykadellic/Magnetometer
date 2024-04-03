@@ -28,7 +28,7 @@ def read_and_split_file(file_in: str):
 
     # slice arry_in into proper windows
 
-    arr_in = arr_in[3000:]
+    arr_in = arr_in[300:]
     sliced_arr = slice_arr(arr_in)
     # [ [[x1, y1]
     #    [x2, y2]],

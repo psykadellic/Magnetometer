@@ -40,25 +40,57 @@ if __name__ == "__main__":
                 maxes.append(df[[1]].max())
                 std_dev.append(df[[1]].std())
             
-            # average_df = pd.DataFrame(averages)
-            # average_df.to_csv("./out/"+file[0:-4]+"/average/data_avg_abs.csv")
-            # plt.plot(average_df.index, average_df.values)
-            # plt.savefig("./out/"+file[0:-4]+"/average/plot_avg_abs.png")
-            # plt.cla()
+            average_df = pd.DataFrame(averages)
+            average_df.to_csv("./out/"+file[0:-4]+"/average/data_avg_abs.csv")
+            plt.plot(average_df.index, average_df.values)
+            plt.savefig("./out/"+file[0:-4]+"/average/plot_avg_abs.png")
+            plt.cla()
 
-            # average_df = pd.DataFrame(mins)
-            # average_df.to_csv("./out/"+file[0:-4]+"/average/data_min_abs.csv")
-            # plt.plot(average_df.index, average_df.values)
-            # plt.savefig("./out/"+file[0:-4]+"/average/plot_min_abs.png")
-            # plt.cla()
+            average_df = pd.DataFrame(mins)
+            average_df.to_csv("./out/"+file[0:-4]+"/average/data_min_abs.csv")
+            plt.plot(average_df.index, average_df.values)
+            plt.savefig("./out/"+file[0:-4]+"/average/plot_min_abs.png")
+            plt.cla()
 
-            # average_df = pd.DataFrame(maxes)
-            # average_df.to_csv("./out/"+file[0:-4]+"/average/data_max_abs.csv")
-            # plt.plot(average_df.index, average_df.values)
-            # plt.savefig("./out/"+file[0:-4]+"/average/plot_max_abs.png")
-            # plt.cla()
+            average_df = pd.DataFrame(maxes)
+            average_df.to_csv("./out/"+file[0:-4]+"/average/data_max_abs.csv")
+            plt.plot(average_df.index, average_df.values)
+            plt.savefig("./out/"+file[0:-4]+"/average/plot_max_abs.png")
+            plt.cla()
 
-            # average_df = pd.DataFrame(std_dev)
-            # average_df.to_csv("./out/"+file[0:-4]+"/average/data_std_abs.csv")
-            # plt.plot(average_df.index, average_df.values)
-            # plt.savefig("./out/"+file[0:-4]+"/average/plot_std_abs.png")
+            average_df = pd.DataFrame(std_dev)
+            average_df.to_csv("./out/"+file[0:-4]+"/average/data_std_abs.csv")
+            plt.plot(average_df.index, average_df.values)
+            plt.savefig("./out/"+file[0:-4]+"/average/plot_std_abs.png")
+
+    # input_csv = np.genfromtxt("./csv/trendent_increasing.csv", delimiter=",", skip_header=1)
+    # input_csv = input_csv[300:130300]
+    # input_csv = input_csv.T
+
+
+    # arr_in = np.vstack((input_csv[0], input_csv[1])).T
+    # average_df = pd.DataFrame(arr_in)
+    # average_df.to_csv("./out/trendent_increasing/total/data_x.csv")
+    # plt.plot(input_csv[0], input_csv[1])
+    # plt.savefig("./out/trendent_increasing/total/plot_x.png")
+    # plt.cla()
+
+    # arr_in = np.vstack((input_csv[0], input_csv[2])).T
+    # average_df = pd.DataFrame(arr_in)
+    # average_df.to_csv("./out/trendent_increasing/total/data_y.csv")
+    # plt.plot(input_csv[0], input_csv[2])
+    # plt.savefig("./out/trendent_increasing/total/plot_y.png")
+    # plt.cla()
+
+    # arr_in = np.vstack((input_csv[0], input_csv[3])).T
+    # average_df = pd.DataFrame(arr_in)
+    # average_df.to_csv("./out/trendent_increasing/total/data_z.csv")
+    # plt.plot(input_csv[0], input_csv[3])
+    # plt.savefig("./out/trendent_increasing/total/plot_z.png")
+    # plt.cla()
+
+    # arr_in = np.vstack((input_csv[0], input_csv[4])).T
+    # average_df = pd.DataFrame(arr_in)
+    # average_df.to_csv("./out/trendent_increasing/total/data_std.csv")
+    # plt.plot(input_csv[0], input_csv[4])
+    # plt.savefig("./out/trendent_increasing/total/plot_std.png")
