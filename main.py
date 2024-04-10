@@ -159,45 +159,46 @@ if __name__ == "__main__":
             (abs_trial[0][[1]].max() + abs_trial[1][[1]].max()) / 2,
         ]))
 
-    test_1_likely = {}
-    for ind, entry in enumerate(testing_1):
-        distances = pd.Series(list(map(lambda s2: float((((entry - s2)**2).sum()**0.5).item()), training))) # vector of 100
-        
-        mins = []
-        d_max = distances.max()
-        for n in range(3): # find 3 bottom mins
-            min_ind = distances.idxmin()
-            mins.append(min_ind)
+    with open("test_1_likely.txt","w+") as output:
+        for ind, entry in enumerate(testing_1):
+            distances = pd.Series(list(map(lambda s2: float((((entry - s2)**2).sum()**0.5).item()), training))) # vector of 100
+            
+            mins = []
+            d_max = distances.max()
+            for n in range(3): # find 3 bottom mins
+                min_ind = distances.idxmin()
+                mins.append(min_ind)
 
-            if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
-                distances[min_ind] = d_max
-        test_1_likely[ind] = mins
+                if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
+                    distances[min_ind] = d_max
+            output.write(str(ind) + "\t" + mins + "\n")
 
-    test_2_likely = {}
-    for ind, entry in enumerate(testing_2):
-        distances = pd.Series(list(map(lambda s2: float((((entry - s2)**2).sum()**0.5).item()), training))) # vector of 100
-        mins = []
-        d_max = distances.max()
-        for n in range(3): # find 3 bottom mins
-            min_ind = distances.idxmin()
-            mins.append(min_ind)
+    with open("test_2_likely.txt","w+") as output:
+        for ind, entry in enumerate(testing_2):
+            distances = pd.Series(list(map(lambda s2: float((((entry - s2)**2).sum()**0.5).item()), training))) # vector of 100
+            mins = []
+            d_max = distances.max()
+            for n in range(3): # find 3 bottom mins
+                min_ind = distances.idxmin()
+                mins.append(min_ind)
 
-            if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
-                distances[min_ind] = d_max
-        test_2_likely[ind] = mins
+                if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
+                    distances[min_ind] = d_max
+            output.write(str(ind) + "\t" + mins + "\n")
 
-    test_3_likely = {}
-    for ind, entry in enumerate(testing_3):
-        distances = pd.Series(list(map(lambda s2: float((((entry - s2)**2).sum()**0.5).item()), training))) # vector of 100
-        
-        mins = []
-        d_max = distances.max()
-        for n in range(3): # find 3 bottom mins
-            min_ind = distances.idxmin()
-            mins.append(min_ind)
 
-            if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
-                distances[min_ind] = d_max
-        test_3_likely[ind] = mins
+    with open("test_3_likely.txt","w+") as output:
+        for ind, entry in enumerate(testing_3):
+            distances = pd.Series(list(map(lambda s2: float((((entry - s2)**2).sum()**0.5).item()), training))) # vector of 100
+            
+            mins = []
+            d_max = distances.max()
+            for n in range(3): # find 3 bottom mins
+                min_ind = distances.idxmin()
+                mins.append(min_ind)
+
+                if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
+                    distances[min_ind] = d_max
+            output.write(str(ind) + "\t" + mins + "\n")
 
     print(test_3_likely)
