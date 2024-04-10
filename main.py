@@ -171,7 +171,7 @@ if __name__ == "__main__":
 
                 if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
                     distances[min_ind] = d_max
-            output.write(str(ind) + "\t" + mins + "\n")
+            output.write(str(ind) + "\t" + str(mins) + "\n")
 
     with open("test_2_likely.txt","w+") as output:
         for ind, entry in enumerate(testing_2):
@@ -184,7 +184,7 @@ if __name__ == "__main__":
 
                 if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
                     distances[min_ind] = d_max
-            output.write(str(ind) + "\t" + mins + "\n")
+            output.write(str(ind) + "\t" + str(mins) + "\n")
 
 
     with open("test_3_likely.txt","w+") as output:
@@ -199,6 +199,6 @@ if __name__ == "__main__":
 
                 if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
                     distances[min_ind] = d_max
-            output.write(str(ind) + "\t" + mins + "\n")
+            output.write(str(ind) + "\t" + str(mins) + "\n")
 
     print(test_3_likely)
