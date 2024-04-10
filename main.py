@@ -4,93 +4,200 @@ import numpy as np
 import matplotlib.pyplot as plt
 import utils
 
+num_exp = 5
 
 if __name__ == "__main__":
 
-    for root, dir, files in os.walk("./csv"):
-        for file in files:
-            if ".DS_Store" in file:
-                    continue
-            ret_arr = utils.read_and_split_file(file)
-            try:
-                os.mkdir("./out/"+file[0:-4])
-            except:
-                ""
+    for ind in range(num_exp):
+        try:
+            os.mkdir("./experiment"+str(ind))
+        except:
+            ""
+        try:
+            os.mkdir("./experiment" + str(ind) +"/x")
+        except:
+            ""
+        try:
+            os.mkdir("./experiment" + str(ind) +"/y")
+        except:
+            ""
+        try:
+            os.mkdir("./experiment" + str(ind) +"/z")
+        except:
+            ""
+        try:
+            os.mkdir("./experiment" + str(ind) +"/abs")
+        except:
+            ""
 
-            averages = []
-            mins = []
-            maxes = []
-            std_dev = []
+    testing_1 = []
+    testing_2 = []
+    testing_3 = []
+
+    # ok we are hardcoding variables, which is wrong, but whatever.
+
+    training = []
+    
+
+    for i in range(100):
+        file = "./out/trendent_increasing/trial"+str(i)+"/"
+
+        x_input_csv = np.genfromtxt(file+"data_x.csv", delimiter=",", skip_header=1)
+        y_input_csv = np.genfromtxt(file+"data_y.csv", delimiter=",", skip_header=1)
+        z_input_csv = np.genfromtxt(file+"data_z.csv", delimiter=",", skip_header=1)
+        abs_input_csv = np.genfromtxt(file+"data.csv", delimiter=",", skip_header=1)
+
+
+        exp_len = int(len(x_input_csv) / num_exp) # n experiments
+
+        x_trial = []
+        y_trial = []
+        z_trial = []
+        abs_trial = []
+
+        
+        for j in range(num_exp):
+            x_dat = x_input_csv[exp_len * j : exp_len*(j+1)]
+            y_dat = y_input_csv[exp_len * j : exp_len*(j+1)]
+            z_dat = z_input_csv[exp_len * j : exp_len*(j+1)]
+            abs_dat = abs_input_csv[exp_len * j : exp_len*(j+1)]
+
+            x_df = pd.DataFrame(x_dat)
+            y_df = pd.DataFrame(y_dat)
+            z_df = pd.DataFrame(z_dat)
+            abs_df = pd.DataFrame(abs_dat)
+
+            # drop old index column
             
-            for ind, arr in enumerate(ret_arr):
-                try:
-                    os.mkdir("./out/"+file[0:-4]+"/trial"+str(ind))
-                except:
-                    ""
-                df = pd.DataFrame(arr)
-                df.to_csv("./out/"+file[0:-4]+"/trial"+str(ind)+"/data.csv")
-                iter_arr_transpose = arr.T
-                plt.plot(iter_arr_transpose[0], iter_arr_transpose[1], linewidth=2, linestyle="-", c="b")
-                plt.savefig("./out/"+file[0:-4]+"/trial"+str(ind)+"/plot.png")
-                plt.cla()
-                # plt.show()
-
-                averages.append(df[[1]].mean())
-                mins.append(df[[1]].min())
-                maxes.append(df[[1]].max())
-                std_dev.append(df[[1]].std())
+            x_df.drop(x_df.columns[[0]], axis=1, inplace=True)
+            y_df.drop(y_df.columns[[0]], axis=1, inplace=True)
+            z_df.drop(z_df.columns[[0]], axis=1, inplace=True)
+            abs_df.drop(abs_df.columns[[0]], axis=1, inplace=True)
             
-            average_df = pd.DataFrame(averages)
-            average_df.to_csv("./out/"+file[0:-4]+"/average/data_avg_abs.csv")
-            plt.plot(average_df.index, average_df.values)
-            plt.savefig("./out/"+file[0:-4]+"/average/plot_avg_abs.png")
-            plt.cla()
+            x_trial.append(x_df)
+            y_trial.append(y_df)
+            z_trial.append(z_df)
+            abs_trial.append(abs_df)
 
-            average_df = pd.DataFrame(mins)
-            average_df.to_csv("./out/"+file[0:-4]+"/average/data_min_abs.csv")
-            plt.plot(average_df.index, average_df.values)
-            plt.savefig("./out/"+file[0:-4]+"/average/plot_min_abs.png")
-            plt.cla()
+            x_df.to_csv("./experiment"+str(j)+"/x/trial"+str(i)+".csv")
+            y_df.to_csv("./experiment"+str(j)+"/y/trial"+str(i)+".csv")
+            z_df.to_csv("./experiment"+str(j)+"/z/trial"+str(i)+".csv")
+            abs_df.to_csv("./experiment"+str(j)+"/abs/trial"+str(i)+".csv")
 
-            average_df = pd.DataFrame(maxes)
-            average_df.to_csv("./out/"+file[0:-4]+"/average/data_max_abs.csv")
-            plt.plot(average_df.index, average_df.values)
-            plt.savefig("./out/"+file[0:-4]+"/average/plot_max_abs.png")
-            plt.cla()
+        # testing 1
 
-            average_df = pd.DataFrame(std_dev)
-            average_df.to_csv("./out/"+file[0:-4]+"/average/data_std_abs.csv")
-            plt.plot(average_df.index, average_df.values)
-            plt.savefig("./out/"+file[0:-4]+"/average/plot_std_abs.png")
+        testing_1.append(pd.Series([
+            x_trial[2][[1]].mean(),
+            y_trial[2][[1]].mean(),
+            z_trial[2][[1]].mean(),
+            abs_trial[2][[1]].mean(),
 
-    # input_csv = np.genfromtxt("./csv/trendent_increasing.csv", delimiter=",", skip_header=1)
-    # input_csv = input_csv[300:130300]
-    # input_csv = input_csv.T
+            x_trial[2][[1]].min(),
+            y_trial[2][[1]].min(),
+            z_trial[2][[1]].min(),
+            abs_trial[2][[1]].min(),
 
+            x_trial[2][[1]].max(),
+            y_trial[2][[1]].max(),
+            z_trial[2][[1]].max(),
+            abs_trial[2][[1]].max(),
+        ]))
 
-    # arr_in = np.vstack((input_csv[0], input_csv[1])).T
-    # average_df = pd.DataFrame(arr_in)
-    # average_df.to_csv("./out/trendent_increasing/total/data_x.csv")
-    # plt.plot(input_csv[0], input_csv[1])
-    # plt.savefig("./out/trendent_increasing/total/plot_x.png")
-    # plt.cla()
+        # testing 2
+        
+        testing_2.append(pd.Series([
+            x_trial[3][[1]].mean(),
+            y_trial[3][[1]].mean(),
+            z_trial[3][[1]].mean(),
+            abs_trial[3][[1]].mean(),
 
-    # arr_in = np.vstack((input_csv[0], input_csv[2])).T
-    # average_df = pd.DataFrame(arr_in)
-    # average_df.to_csv("./out/trendent_increasing/total/data_y.csv")
-    # plt.plot(input_csv[0], input_csv[2])
-    # plt.savefig("./out/trendent_increasing/total/plot_y.png")
-    # plt.cla()
+            x_trial[3][[1]].min(),
+            y_trial[3][[1]].min(),
+            z_trial[3][[1]].min(),
+            abs_trial[3][[1]].min(),
 
-    # arr_in = np.vstack((input_csv[0], input_csv[3])).T
-    # average_df = pd.DataFrame(arr_in)
-    # average_df.to_csv("./out/trendent_increasing/total/data_z.csv")
-    # plt.plot(input_csv[0], input_csv[3])
-    # plt.savefig("./out/trendent_increasing/total/plot_z.png")
-    # plt.cla()
+            x_trial[3][[1]].max(),
+            y_trial[3][[1]].max(),
+            z_trial[3][[1]].max(),
+            abs_trial[3][[1]].max(),
+        ]))
+        # testing 3
+        
+        testing_3.append(pd.Series([
+            x_trial[4][[1]].mean(),
+            y_trial[4][[1]].mean(),
+            z_trial[4][[1]].mean(),
+            abs_trial[4][[1]].mean(),
 
-    # arr_in = np.vstack((input_csv[0], input_csv[4])).T
-    # average_df = pd.DataFrame(arr_in)
-    # average_df.to_csv("./out/trendent_increasing/total/data_std.csv")
-    # plt.plot(input_csv[0], input_csv[4])
-    # plt.savefig("./out/trendent_increasing/total/plot_std.png")
+            x_trial[4][[1]].min(),
+            y_trial[4][[1]].min(),
+            z_trial[4][[1]].min(),
+            abs_trial[4][[1]].min(),
+
+            x_trial[4][[1]].max(),
+            y_trial[4][[1]].max(),
+            z_trial[4][[1]].max(),
+            abs_trial[4][[1]].max(),
+        ]))
+        
+        # populate training array
+        
+        training.append(pd.Series([
+            (x_trial[0][[1]].mean() + x_trial[1][[1]].mean()) / 2,
+            (y_trial[0][[1]].mean() + y_trial[1][[1]].mean()) / 2,
+            (z_trial[0][[1]].mean() + z_trial[1][[1]].mean()) / 2,
+            (abs_trial[0][[1]].mean() + abs_trial[1][[1]].mean()) / 2,
+
+            (x_trial[0][[1]].min() + x_trial[1][[1]].min()) / 2,
+            (y_trial[0][[1]].min() + y_trial[1][[1]].min()) / 2,
+            (z_trial[0][[1]].min() + z_trial[1][[1]].min()) / 2,
+            (abs_trial[0][[1]].min() + abs_trial[1][[1]].min()) / 2,
+
+            (x_trial[0][[1]].max() + x_trial[1][[1]].max()) / 2,
+            (y_trial[0][[1]].max() + y_trial[1][[1]].max()) / 2,
+            (z_trial[0][[1]].max() + z_trial[1][[1]].max()) / 2,
+            (abs_trial[0][[1]].max() + abs_trial[1][[1]].max()) / 2,
+        ]))
+
+    test_1_likely = {}
+    for ind, entry in enumerate(testing_1):
+        distances = pd.Series(list(map(lambda s2: float((((entry - s2)**2).sum()**0.5).item()), training))) # vector of 100
+        
+        mins = []
+        d_max = distances.max()
+        for n in range(3): # find 3 bottom mins
+            min_ind = distances.idxmin()
+            mins.append(min_ind)
+
+            if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
+                distances[min_ind] = d_max
+        test_1_likely[ind] = mins
+
+    test_2_likely = {}
+    for ind, entry in enumerate(testing_2):
+        distances = pd.Series(list(map(lambda s2: float((((entry - s2)**2).sum()**0.5).item()), training))) # vector of 100
+        mins = []
+        d_max = distances.max()
+        for n in range(3): # find 3 bottom mins
+            min_ind = distances.idxmin()
+            mins.append(min_ind)
+
+            if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
+                distances[min_ind] = d_max
+        test_2_likely[ind] = mins
+
+    test_3_likely = {}
+    for ind, entry in enumerate(testing_3):
+        distances = pd.Series(list(map(lambda s2: float((((entry - s2)**2).sum()**0.5).item()), training))) # vector of 100
+        
+        mins = []
+        d_max = distances.max()
+        for n in range(3): # find 3 bottom mins
+            min_ind = distances.idxmin()
+            mins.append(min_ind)
+
+            if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
+                distances[min_ind] = d_max
+        test_3_likely[ind] = mins
+
+    print(test_3_likely)

@@ -78,6 +78,9 @@ def filter_data(sliced_arr: np.ndarray):
 ############################################################
 ### UTILS
 
+def euclidian_distance():
+    return
+
 def pad_arr(arr_in: np.ndarray[np.float64], window: int = 20):
     return np.pad(
             arr_in,
