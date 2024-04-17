@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from scipy.signal import savgol_filter
 import matplotlib.pyplot as plt
 
@@ -143,3 +144,95 @@ def slice_arr(
 
     return ret_arr
     
+############################################################
+### REGRESSION UTILS
+
+def slice_data(data_in, num_slices, window_len, bandwidth_num, col_name):
+    data_out = []
+
+    for exp_ind in range(num_slices):
+        out_dat = data_in[window_len * exp_ind : window_len*(exp_ind+1)]
+
+        ########
+        # to df
+
+        out_df = pd.DataFrame(out_dat)
+
+        # drop old index column
+        
+        out_df.drop(out_df.columns[[0]], axis=1, inplace=True)
+
+        ########
+        # append this window to our total num of trials
+        data_out.append(out_df)
+
+        out_df.to_csv("./experiment"+str(exp_ind)+"/"+col_name+"/trial"+str(bandwidth_num)+".csv")
+
+    return data_out
+
+def get_training_and_testing_for_bandwidth(bandwidth_num, num_experiments):
+    file = "./out/trendent_increasing/trial"+str(bandwidth_num)+"/"
+
+    #### read csv from file and parse as numpy array
+
+    x_input_csv = np.genfromtxt(file+"data_x.csv", delimiter=",", skip_header=1)
+    y_input_csv = np.genfromtxt(file+"data_y.csv", delimiter=",", skip_header=1)
+    z_input_csv = np.genfromtxt(file+"data_z.csv", delimiter=",", skip_header=1)
+    abs_input_csv = np.genfromtxt(file+"data.csv", delimiter=",", skip_header=1)
+
+    exp_len = int(len(x_input_csv) / num_experiments) # len of each window
+
+    # [[window 1],[window 2],[window 3]...]
+    x_trial = slice_data(x_input_csv, num_experiments, exp_len, bandwidth_num, "x")
+    y_trial = slice_data(y_input_csv, num_experiments, exp_len, bandwidth_num, "y")
+    z_trial = slice_data(z_input_csv, num_experiments, exp_len, bandwidth_num, "z")
+    abs_trial = slice_data(abs_input_csv, num_experiments, exp_len, bandwidth_num, "abs")
+
+    testing = []
+
+    training = []
+    
+    # fill testing set
+
+    for test_ind in range(num_experiments-2):
+        testing.append([])
+
+        testing[test_ind].append(pd.Series([
+            x_trial[test_ind][[1]].mean(),
+            y_trial[test_ind][[1]].mean(),
+            z_trial[test_ind][[1]].mean(),
+            abs_trial[test_ind][[1]].mean(),
+
+            x_trial[test_ind][[1]].min(),
+            y_trial[test_ind][[1]].min(),
+            z_trial[test_ind][[1]].min(),
+            abs_trial[test_ind][[1]].min(),
+
+            x_trial[test_ind][[1]].max(),
+            y_trial[test_ind][[1]].max(),
+            z_trial[test_ind][[1]].max(),
+            abs_trial[test_ind][[1]].max(),
+        ]))
+
+    
+    # populate training array
+    
+    training.append(pd.Series([
+        (x_trial[0][[1]].mean() + x_trial[1][[1]].mean()) / 2,
+        (y_trial[0][[1]].mean() + y_trial[1][[1]].mean()) / 2,
+        (z_trial[0][[1]].mean() + z_trial[1][[1]].mean()) / 2,
+        (abs_trial[0][[1]].mean() + abs_trial[1][[1]].mean()) / 2,
+
+        (x_trial[0][[1]].min() + x_trial[1][[1]].min()) / 2,
+        (y_trial[0][[1]].min() + y_trial[1][[1]].min()) / 2,
+        (z_trial[0][[1]].min() + z_trial[1][[1]].min()) / 2,
+        (abs_trial[0][[1]].min() + abs_trial[1][[1]].min()) / 2,
+
+        (x_trial[0][[1]].max() + x_trial[1][[1]].max()) / 2,
+        (y_trial[0][[1]].max() + y_trial[1][[1]].max()) / 2,
+        (z_trial[0][[1]].max() + z_trial[1][[1]].max()) / 2,
+        (abs_trial[0][[1]].max() + abs_trial[1][[1]].max()) / 2
+    ]))
+    
+
+    return (testing, training)
