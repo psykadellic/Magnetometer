@@ -198,40 +198,40 @@ def get_training_and_testing_for_bandwidth(bandwidth_num, num_experiments):
         testing.append([])
 
         testing[test_ind].append(pd.Series([
-            x_trial[test_ind][[1]].mean(),
-            y_trial[test_ind][[1]].mean(),
-            z_trial[test_ind][[1]].mean(),
-            abs_trial[test_ind][[1]].mean(),
+            x_trial[test_ind][[2]].mean(),
+            y_trial[test_ind][[2]].mean(),
+            z_trial[test_ind][[2]].mean(),
+            abs_trial[test_ind][[2]].mean(),
 
-            x_trial[test_ind][[1]].min(),
-            y_trial[test_ind][[1]].min(),
-            z_trial[test_ind][[1]].min(),
-            abs_trial[test_ind][[1]].min(),
+            x_trial[test_ind][[2]].min(),
+            y_trial[test_ind][[2]].min(),
+            z_trial[test_ind][[2]].min(),
+            abs_trial[test_ind][[2]].min(),
 
-            x_trial[test_ind][[1]].max(),
-            y_trial[test_ind][[1]].max(),
-            z_trial[test_ind][[1]].max(),
-            abs_trial[test_ind][[1]].max(),
+            x_trial[test_ind][[2]].max(),
+            y_trial[test_ind][[2]].max(),
+            z_trial[test_ind][[2]].max(),
+            abs_trial[test_ind][[2]].max(),
         ]))
 
     
     # populate training array
     
     training.append(pd.Series([
-        (x_trial[0][[1]].mean() + x_trial[1][[1]].mean()) / 2,
-        (y_trial[0][[1]].mean() + y_trial[1][[1]].mean()) / 2,
-        (z_trial[0][[1]].mean() + z_trial[1][[1]].mean()) / 2,
-        (abs_trial[0][[1]].mean() + abs_trial[1][[1]].mean()) / 2,
+        (x_trial[0][[2]].mean() + x_trial[1][[2]].mean()) / 2,
+        (y_trial[0][[2]].mean() + y_trial[1][[2]].mean()) / 2,
+        (z_trial[0][[2]].mean() + z_trial[1][[2]].mean()) / 2,
+        (abs_trial[0][[2]].mean() + abs_trial[1][[2]].mean()) / 2,
 
-        (x_trial[0][[1]].min() + x_trial[1][[1]].min()) / 2,
-        (y_trial[0][[1]].min() + y_trial[1][[1]].min()) / 2,
-        (z_trial[0][[1]].min() + z_trial[1][[1]].min()) / 2,
-        (abs_trial[0][[1]].min() + abs_trial[1][[1]].min()) / 2,
+        (x_trial[0][[2]].min() + x_trial[1][[2]].min()) / 2,
+        (y_trial[0][[2]].min() + y_trial[1][[2]].min()) / 2,
+        (z_trial[0][[2]].min() + z_trial[1][[2]].min()) / 2,
+        (abs_trial[0][[2]].min() + abs_trial[1][[2]].min()) / 2,
 
-        (x_trial[0][[1]].max() + x_trial[1][[1]].max()) / 2,
-        (y_trial[0][[1]].max() + y_trial[1][[1]].max()) / 2,
-        (z_trial[0][[1]].max() + z_trial[1][[1]].max()) / 2,
-        (abs_trial[0][[1]].max() + abs_trial[1][[1]].max()) / 2
+        (x_trial[0][[2]].max() + x_trial[1][[2]].max()) / 2,
+        (y_trial[0][[2]].max() + y_trial[1][[2]].max()) / 2,
+        (z_trial[0][[2]].max() + z_trial[1][[2]].max()) / 2,
+        (abs_trial[0][[2]].max() + abs_trial[1][[2]].max()) / 2
     ]))
     
 
