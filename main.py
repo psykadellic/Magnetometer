@@ -3,65 +3,33 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import utils
-
-num_exp = 5
+import re
 
 if __name__ == "__main__":
+    for i in range(3):
+        with open("./test_"+str(i)+"_likely.txt", "r") as test_file:
+            
+            in_one = 0
+            in_two = 0
+            in_three = 0
 
-    for ind in range(num_exp):
-        # sometimes u need disgusting code for disgusting results
-        try:
-            os.mkdir("./experiment"+str(ind))
-        except:
-            ""
-        try:
-            os.mkdir("./experiment" + str(ind) +"/x")
-        except:
-            ""
-        try:
-            os.mkdir("./experiment" + str(ind) +"/y")
-        except:
-            ""
-        try:
-            os.mkdir("./experiment" + str(ind) +"/z")
-        except:
-            ""
-        try:
-            os.mkdir("./experiment" + str(ind) +"/abs")
-        except:
-            ""
+            distance_from = {}
 
-    testing = []
-    for n in range(num_exp - 2):
-        testing.append([])
+            for line in test_file.readlines():
+                matches = list(map(lambda x: int(x), re.findall("\d+", line)))
+                actual, predicted = matches[0], matches[1:]
 
-    # ok we are hardcoding variables, which is wrong, but whatever.
-    # UPDATE: WE ARE NO LONGER HARDCODING VARIABLES. YIPPEEE!!
-
-    # each training[0..n] is a training set
-    training = []
-    
-
-    for bandwidth_pct in range(100):
-        bd_testing, bd_training = utils.get_training_and_testing_for_bandwidth(bandwidth_pct, num_exp)
-        for n in range(num_exp - 2):
-            testing[n].append(bd_testing[n])
-        training.append(bd_training)
-
-    for test_ind, test_set in enumerate(testing):
-        with open("test_"+str(test_ind)+"_likely.txt","w+") as output:
-            for ind, test_entry in enumerate(test_set):
-                distances = []
-                for train_entry in training:
-                    # sqrt ( train - test)
-                    distances.append(float((((train_entry[0] - test_entry[0])**2).sum()**0.5).item()))
-                distances = pd.Series(distances)
-                mins = []
-                d_max = distances.max()
-                for n in range(3): # find 3 bottom mins
-                    min_ind = distances.idxmin()
-                    mins.append(min_ind)
-
-                    if min_ind < len(distances): # bro it is returning an index that is not a valid index. ?????
-                        distances[min_ind] = d_max
-                output.write(str(ind) + "\t" + str(mins) + "\n")
+                if actual == predicted[0]:
+                    in_one += 1
+                    in_two += 1
+                    in_three += 1
+                elif actual == predicted[1]:
+                    in_two += 1
+                    in_three += 1
+                elif actual == predicted[2]:
+                    in_three += 1
+                else:
+                    distance_from[actual] = min([abs(actual-predicted[0]),abs(actual-predicted[1]),abs(actual-predicted[2])])
+                
+            print("TEST %d %d%% %d%% %d%%"%(i, in_one, in_two, in_three))
+            print(distance_from)
